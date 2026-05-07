@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 
 <html lang="zh-Hant">
-<head><style id="wy-preguard">html{visibility:hidden!important;background:#f7f3ec!important;}body{visibility:hidden!important;}@media print{html,body,body *{display:none!important;visibility:hidden!important;}html{background:#fff!important;}}@page{margin:0;size:auto;}</style><meta charset="utf-8"/><meta content="v2-l1l8-silent" name="wy-protection"/>
+<head><style id="wy-printblock">@media print{html,body{display:none!important;visibility:hidden!important;background:#fff!important;}html *,body *,iframe,iframe *{display:none!important;visibility:hidden!important;}}@page{margin:0!important;size:auto!important;}</style><style id="wy-preguard">html{visibility:hidden!important;background:#f7f3ec!important;}body{visibility:hidden!important;}</style><meta charset="utf-8"/><meta content="v3-l1l8-silent" name="wy-protection"/>
+<meta content="noai, noimageai, noarchive, noindex, nofollow, nosnippet" name="robots"/>
+<meta content="noai, noimageai, noarchive" name="googlebot"/>
+<meta content="noai" name="ChatGPT-User"/>
+<meta content="noai" name="GPTBot"/>
+<meta content="noai" name="ClaudeBot"/>
+<meta content="noai" name="anthropic-ai"/>
+<meta content="noai" name="CCBot"/>
+<meta content="noai" name="PerplexityBot"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="v2-l1l8-silent" name="wy-protection"/>
 <meta content="noai, noimageai, noarchive, noindex, nofollow, nosnippet" name="robots"/>
 <meta content="noai, noimageai, noarchive" name="googlebot"/>
 <meta content="noai" name="ChatGPT-User"/>
@@ -373,6 +383,28 @@ document.addEventListener('keydown',function(e){
 ['contextmenu','copy','cut','dragstart'].forEach(function(ev){
   document.addEventListener(ev,function(e){e.preventDefault();return false;},true);
 });
+
+/* ============ L2 雙保險：beforeprint + matchMedia('print')（不顯示警告，僅瞬間 display:none）============ */
+function _wyHidePrint(){
+  try{
+    document.documentElement.style.display='none';
+    if(document.body) document.body.style.display='none';
+  }catch(e){}
+}
+function _wyRestorePrint(){
+  try{
+    document.documentElement.style.display='';
+    if(document.body) document.body.style.display='';
+  }catch(e){}
+}
+window.addEventListener('beforeprint',_wyHidePrint);
+window.addEventListener('afterprint',_wyRestorePrint);
+try{
+  var _mql=window.matchMedia('print');
+  var _mqHandler=function(e){if(e.matches)_wyHidePrint();else _wyRestorePrint();};
+  if(_mql.addEventListener) _mql.addEventListener('change',_mqHandler);
+  else if(_mql.addListener) _mql.addListener(_mqHandler);
+}catch(e){}
 
 /* ============ L1/L5 · 解碼器 ============ */
 function _wyDec(s){
@@ -1527,7 +1559,7 @@ h5{font-size:18.5px!important;}
   });
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(e.ctrlKey&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
+    if((e.metaKey||e.ctrlKey)&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
     if(k==='F12')blk(e);
     if(e.ctrlKey&amp;&amp;e.shiftKey&amp;&amp;(k==='I'||k==='J'||k==='C'||k==='K')){blk(e);}
   },true);
@@ -2485,7 +2517,7 @@ h5{font-size:18.5px!important;}
   });
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(e.ctrlKey&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
+    if((e.metaKey||e.ctrlKey)&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
     if(k==='F12')blk(e);
     if(e.ctrlKey&amp;&amp;e.shiftKey&amp;&amp;(k==='I'||k==='J'||k==='C'||k==='K')){blk(e);}
   },true);
@@ -3697,7 +3729,7 @@ h5{font-size:18.5px!important;}
   });
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(e.ctrlKey&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
+    if((e.metaKey||e.ctrlKey)&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
     if(k==='F12')blk(e);
     if(e.ctrlKey&amp;&amp;e.shiftKey&amp;&amp;(k==='I'||k==='J'||k==='C'||k==='K')){blk(e);}
   },true);
@@ -4751,7 +4783,7 @@ h5{font-size:18.5px!important;}
   });
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(e.ctrlKey&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
+    if((e.metaKey||e.ctrlKey)&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
     if(k==='F12')blk(e);
     if(e.ctrlKey&amp;&amp;e.shiftKey&amp;&amp;(k==='I'||k==='J'||k==='C'||k==='K')){blk(e);}
   },true);
@@ -5718,7 +5750,7 @@ h5{font-size:18.5px!important;}
   });
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(e.ctrlKey&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
+    if((e.metaKey||e.ctrlKey)&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
     if(k==='F12')blk(e);
     if(e.ctrlKey&amp;&amp;e.shiftKey&amp;&amp;(k==='I'||k==='J'||k==='C'||k==='K')){blk(e);}
   },true);
@@ -6682,7 +6714,7 @@ h5{font-size:18.5px!important;}
   });
   document.addEventListener('keydown',function(e){
     var k=e.key;
-    if(e.ctrlKey&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
+    if((e.metaKey||e.ctrlKey)&amp;&amp;(k==='c'||k==='C'||k==='a'||k==='A'||k==='s'||k==='S'||k==='p'||k==='P'||k==='u'||k==='U'||k==='x'||k==='X')){blk(e);}
     if(k==='F12')blk(e);
     if(e.ctrlKey&amp;&amp;e.shiftKey&amp;&amp;(k==='I'||k==='J'||k==='C'||k==='K')){blk(e);}
   },true);
