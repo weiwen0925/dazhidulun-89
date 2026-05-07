@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="zh-Hant">
-<head><style id="wy-preguard">html{visibility:hidden!important;background:#f7f3ec!important;}body{visibility:hidden!important;}@media print{html,body,body *{display:none!important;visibility:hidden!important;}html{background:#fff!important;}}@page{margin:0;size:auto;}</style>
-<meta charset="utf-8"/><meta content="v1-l1l8-silent" name="wy-protection"/>
+<head><style id="wy-preguard">html{visibility:hidden!important;background:#f7f3ec!important;}body{visibility:hidden!important;}@media print{html,body,body *{display:none!important;visibility:hidden!important;}html{background:#fff!important;}}@page{margin:0;size:auto;}</style><meta charset="utf-8"/><meta content="v2-l1l8-silent" name="wy-protection"/>
 <meta content="noai, noimageai, noarchive, noindex, nofollow, nosnippet" name="robots"/>
 <meta content="noai, noimageai, noarchive" name="googlebot"/>
 <meta content="noai" name="ChatGPT-User"/>
@@ -12,7 +11,26 @@
 <meta content="noai" name="CCBot"/>
 <meta content="noai" name="PerplexityBot"/>
 <meta content="telephone=no" name="format-detection"/>
-
+<meta content="v2-l1l8-silent" name="wy-protection"/>
+<meta content="noai, noimageai, noarchive, noindex, nofollow, nosnippet" name="robots"/>
+<meta content="noai, noimageai, noarchive" name="googlebot"/>
+<meta content="noai" name="ChatGPT-User"/>
+<meta content="noai" name="GPTBot"/>
+<meta content="noai" name="ClaudeBot"/>
+<meta content="noai" name="anthropic-ai"/>
+<meta content="noai" name="CCBot"/>
+<meta content="noai" name="PerplexityBot"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="v1-l1l8-silent" name="wy-protection"/>
+<meta content="noai, noimageai, noarchive, noindex, nofollow, nosnippet" name="robots"/>
+<meta content="noai, noimageai, noarchive" name="googlebot"/>
+<meta content="noai" name="ChatGPT-User"/>
+<meta content="noai" name="GPTBot"/>
+<meta content="noai" name="ClaudeBot"/>
+<meta content="noai" name="anthropic-ai"/>
+<meta content="noai" name="CCBot"/>
+<meta content="noai" name="PerplexityBot"/>
+<meta content="telephone=no" name="format-detection"/>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="noindex,nofollow,noarchive,nosnippet" name="robots"/>
 <title>大智度論 · 卷八十九 · 完整彙整</title>
@@ -321,14 +339,13 @@ function _silentLock(){
   }
 }
 
-/* ============ B · Webdriver / Headless 偵測 ============ */
+/* ============ B · Webdriver / Headless 偵測（已移除 outerW/H=0 誤判）============ */
 try{
   var ua=navigator.userAgent||'';
   var bad=(navigator.webdriver===true)
-    || /HeadlessChrome|PhantomJS|Selenium|puppeteer|playwright|Slimer|electron/i.test(ua)
-    || (window.outerWidth===0 && window.outerHeight===0);
+    || /HeadlessChrome|PhantomJS|Selenium|Slimer/i.test(ua);
   if(bad){_silentLock();return;}
-}catch(e){_silentLock();return;}
+}catch(e){/* 不因為讀取 navigator 失敗就 lock，避免某些精簡瀏覽器誤判 */}
 
 /* ============ L4 · Origin Lock（同步檢查）============ */
 try{
@@ -380,20 +397,29 @@ function _wyDecodeAll(){
   }
 }
 
-/* ============ L6 · 線上活性驗證（HEAD ping）============ */
+/* ============ L6 · 線上活性驗證（HEAD ping，10s timeout）============ */
 var __wyReady=new Promise(function(resolve,reject){
   var rnd=Math.random().toString(36).slice(2,10);
   var url='https://'+ALLOWED_HOST+ALLOWED_PATH+'?_wyping='+Date.now()+'.'+rnd;
-  var ctrl=null;var to=null;
-  try{ctrl=new AbortController();to=setTimeout(function(){try{ctrl.abort();}catch(e){}},6000);}catch(e){}
-  var opt={method:'HEAD',cache:'no-store',mode:'no-cors',credentials:'omit'};
-  if(ctrl) opt.signal=ctrl.signal;
-  fetch(url,opt).then(function(){
-    if(to) clearTimeout(to);
-    resolve(true);
+  var done=false;
+  var to=setTimeout(function(){
+    if(done) return; done=true; reject(new Error('timeout'));
+  },10000);
+  var opt={method:'HEAD',cache:'no-store',credentials:'omit'};
+  fetch(url,opt).then(function(r){
+    if(done) return; done=true; clearTimeout(to);
+    /* 狀態 200~399 視為通過；HEAD 返回 405 也算「主機可達」放行 */
+    if(!r || (r.status && (r.status<200 || r.status>=500))){
+      reject(new Error('bad_status'));
+    }else{
+      resolve(true);
+    }
   }).catch(function(){
-    if(to) clearTimeout(to);
-    reject(new Error('freshness_fail'));
+    if(done) return; done=true; clearTimeout(to);
+    /* HEAD 失敗 → fallback 用 GET Range 試一次（小流量）*/
+    fetch(url,{method:'GET',cache:'no-store',credentials:'omit',headers:{Range:'bytes=0-1'}})
+      .then(function(){resolve(true);})
+      .catch(function(){reject(new Error('freshness_fail'));});
   });
 });
 window.__wyReady=__wyReady;
@@ -423,15 +449,9 @@ if(document.readyState==='loading'){
   _start();
 }
 
-/* ============ 防禦性：DevTools 偵測（尺寸異常）============ */
-setInterval(function(){
-  if(__wyDead) return;
-  try{
-    var dw=window.outerWidth-window.innerWidth;
-    var dh=window.outerHeight-window.innerHeight;
-    if(dw>200 || dh>250){_silentLock();}
-  }catch(e){}
-},1500);
+/* DevTools 尺寸偵測已移除（outerWidth/Height 在某些瀏覽器配置下
+   會誤判，造成正常使用者被靜默踢出）。L1 編碼 + L4 origin lock
+   + L6 線上活性驗證已足夠形成「只線上流通」的防護層。*/
 
 /* ============ 移除選取（持續）============ */
 setInterval(function(){
@@ -441,8 +461,7 @@ setInterval(function(){
   }catch(e){}
 },400);
 })();
-</script>
-<a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;"></a>
+</script><a id="top" style="position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;"></a>
 <button aria-label="目錄" id="sbToggle">☰</button>
 <div class="read-progress" id="readProgress">
 <span class="rp-label">PROGRESS</span>
