@@ -1185,5 +1185,60 @@ document.addEventListener("keydown",function(e){if(e.key==="Escape")MODAL.classL
 upd();var c=0,iv=setInterval(function(){upd();if(++c>40)clearInterval(iv);},250);
 })();</script>
 <!--WY-C89P6:END-->
+<!--WY-C89TOC:BEGIN-->
+<style id="wy-c89toc-css">
+.toc-tbl{position:absolute;bottom:14px;z-index:3;display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,#8b5e3c,#a9803f);color:#fff;font-family:"Noto Sans TC",sans-serif;font-size:12px;letter-spacing:1px;font-weight:600;line-height:1.25;white-space:nowrap;box-shadow:0 1px 4px rgba(139,94,60,.4);border:1px solid rgba(255,255,255,.2);user-select:none;transition:filter .2s,transform .2s,box-shadow .2s;}
+.toc-tbl:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 4px 12px rgba(139,94,60,.5);}
+.toc-tbl:focus-visible{outline:2px solid #d4a84b;outline-offset:2px;}
+.toc-tbl .tt-ic{font-size:11px;line-height:1;}
+@media(max-width:520px){.toc-tbl{padding:4px 10px;letter-spacing:.3px;}}
+</style>
+<script id="wy-c89toc-js">(function(){
+function nOf(a){var m=(a.getAttribute('href')||'').match(/#chapter-(\d+)/);return m?m[1]:null;}
+function build(){
+  var links=document.querySelectorAll('a.toc-card');
+  for(var i=0;i<links.length;i++){
+    var link=links[i];
+    if(link.querySelector('.toc-tbl'))continue;
+    var n=nOf(link);if(n===null)continue;
+    var tbl=document.createElement('span');tbl.className='toc-tbl';tbl.setAttribute('data-tbl',String(parseInt(n,10)+1));
+    tbl.setAttribute('role','button');tbl.setAttribute('tabindex','0');
+    tbl.setAttribute('aria-label','第'+n+'品 全景總表');tbl.title='本品全景總表';
+    tbl.innerHTML='<span class="tt-ic">\u25a6</span>總表';
+    link.appendChild(tbl);
+  }
+}
+function place(){
+  var links=document.querySelectorAll('a.toc-card');
+  for(var i=0;i<links.length;i++){
+    var link=links[i];
+    var tbl=link.querySelector('.toc-tbl');if(!tbl)continue;
+    var yt=link.querySelector('.toc-yt');
+    var cardR=link.getBoundingClientRect();
+    if(yt){
+      var ytR=yt.getBoundingClientRect();
+      var off=Math.round(cardR.right-ytR.left)+8;
+      tbl.style.right=off+'px';
+    } else {
+      tbl.style.right='16px';
+    }
+  }
+}
+function openT(n){var m=document.getElementById('c89p'+n+'Modal');if(m){m.classList.add('open');}else{location.hash='#chapter-'+(parseInt(n,10)-1);}}
+document.addEventListener('click',function(e){
+  var b=(e.target&&e.target.closest)?e.target.closest('.toc-tbl'):null;if(!b)return;
+  e.preventDefault();e.stopPropagation();openT(b.getAttribute('data-tbl'));
+},true);
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return;
+  var b=(e.target&&e.target.closest)?e.target.closest('.toc-tbl'):null;if(!b)return;
+  e.preventDefault();openT(b.getAttribute('data-tbl'));
+});
+build();place();
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){build();place();});
+window.addEventListener('resize',function(){place();});
+var c=0,iv=setInterval(function(){build();place();if(++c>40)clearInterval(iv);},250);
+})();</script>
+<!--WY-C89TOC:END-->
 </body>
 </html>
